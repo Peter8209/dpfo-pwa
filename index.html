@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <base href="/dpfo-pwa/">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <meta name="description" content="Ứng dụng hỗ trợ tạo tờ khai thuế loại B và xuất XML (eDane).">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- iOS PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="DPFO B">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="apple-touch-startup-image" href="icons/Icon-512.png">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0A6EBD">
+
+  <link rel="manifest" href="manifest.json">
+  <title>Khai thuế TNCN – Mẫu B</title>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('flutter_service_worker.js?v=1452162188');
+      });
+    }
+  </script>
+</body>
+</html>
