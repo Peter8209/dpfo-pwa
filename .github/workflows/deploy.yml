@@ -1,4 +1,4 @@
-name: Deploy Flutter PWA to GitHub Pages
+name: Deploy Flutter Web to GitHub Pages
 
 on:
   push:
@@ -31,25 +31,25 @@ jobs:
         run: flutter --version
 
       - name: Install dependencies
+        working-directory: dpfo_vn_app_flutter_FULL
         run: flutter pub get
 
       - name: Build Flutter Web
+        working-directory: dpfo_vn_app_flutter_FULL
         run: |
-          flutter build web --release --base-href "/dpfo-pwa/"
+          flutter build web \
+            --release \
+            --base-href "/dpfo-pwa/"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build/web
+          path: dpfo_vn_app_flutter_FULL/build/web
 
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
 
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
