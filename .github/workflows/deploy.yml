@@ -1,6 +1,9 @@
-name: Build and Deploy Flutter Web
+name: Build & Deploy Flutter Web
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -8,20 +11,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      # 1️⃣ Stiahne kód z GitHubu
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Nainštaluje Flutter (FIXNÁ verzia)
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.3'
           cache: true
 
+      # 3️⃣ Zapne web podporu
       - name: Enable Flutter Web
         run: flutter config --enable-web
 
+      # 4️⃣ Závislosti
       - name: Install dependencies
         run: flutter pub get
 
+      # 5️⃣ Build web
       - name: Build Flutter Web
         run: flutter build web
+
+      # 6️⃣ (VOLITEĽNÉ) uloží build ako artefakt
+      - name: Upload web build
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-web
+          path: build/web
