@@ -1,59 +1,40 @@
-name: Deploy Flutter Web to GitHub Pages
+name: Deploy DPFO PWA to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: 'stable'
+          channel: 'stable'
 
-      - name: Flutter version
-        run: flutter --version
+      - name: Flutter doctor
+        run: flutter doctor -v
 
-      # 👇 KĽÚČOVÉ – PRACOVNÝ ADRESÁR
-      - name: Install dependencies
-        working-directory: dpfo_vn_app_flutter_FULL
+      - name: Enable web
+        run: flutter config --enable-web
+
+      - name: Get dependencies
         run: flutter pub get
 
-      - name: Build Flutter Web
-        working-directory: dpfo_vn_app_flutter_FULL
-        run: |
-          flutter build web --release --base-href "/dpfo-pwa/"
+      - name: Build web
+        run: flutter build web --release --base-href /dpfo-pwa/
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dpfo_vn_app_flutter_FULL/build/web
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/web
